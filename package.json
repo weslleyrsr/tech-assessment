@@ -1,0 +1,20 @@
+{
+  "name": "tech-assessment",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "analyze": "bun run src/cli.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "dependencies": {
+    "@langchain/core": "^0.3.10",
+    "@langchain/openai": "^0.3.12",
+    "@langchain/langgraph": "^0.2.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
