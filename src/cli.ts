@@ -15,29 +15,56 @@ type Options = {
 };
 
 function parseArgs(argv: string[]): Options {
-  const opts: Options = {
-    dir: process.cwd(),
-    maxFiles: 60,
-    maxCharsPerFile: 4000,
-  } as Options;
-  for (let i = 2; i < argv.length; i++) {
-    const a = argv[i];
-    const next = () => (i + 1 < argv.length ? argv[++i] : undefined);
-    if (a === "--dir" || a === "-d") opts.dir = resolve(next() ?? ".");
-    else if (a === "--prompt" || a === "-p") opts.prompt = next();
-    else if (a === "--model" || a === "-m") opts.model = next();
-    else if (a === "--temperature" || a === "-t") opts.temperature = Number(next());
-    else if (a === "--max-files") opts.maxFiles = Number(next());
-    else if (a === "--max-chars") opts.maxCharsPerFile = Number(next());
-    else if (a === "--out" || a === "-o") opts.out = next();
-    else if (a === "--help" || a === "-h") {
-      printHelp();
-      process.exit(0);
-    } else if (!a.startsWith("-")) {
-      opts.dir = resolve(a);
+    const opts: Options = {
+        dir: process.cwd(),
+        maxFiles: 60,
+        maxCharsPerFile: 4000,
+    };
+
+    const args = argv.slice(2);
+    let i = 0;
+
+    while (i < args.length) {
+        const arg = args[i++];
+
+        switch (arg) {
+            case "--dir":
+            case "-d":
+                opts.dir = resolve(args[i++] ?? ".");
+                break;
+            case "--prompt":
+            case "-p":
+                opts.prompt = args[i++];
+                break;
+            case "--model":
+            case "-m":
+                opts.model = args[i++];
+                break;
+            case "--temperature":
+            case "-t":
+                opts.temperature = Number(args[i++]);
+                break;
+            case "--max-files":
+                opts.maxFiles = Number(args[i++]);
+                break;
+            case "--max-chars":
+                opts.maxCharsPerFile = Number(args[i++]);
+                break;
+            case "--out":
+            case "-o":
+                opts.out = args[i++];
+                break;
+            case "--help":
+            case "-h":
+                printHelp();
+                process.exit(0);
+            default:
+                if (arg && !arg.startsWith("-")) {
+                    opts.dir = resolve(arg);
+                }
+        }
     }
-  }
-  return opts;
+    return opts;
 }
 
 function printHelp() {
